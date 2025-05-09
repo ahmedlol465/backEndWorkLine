@@ -16,4 +16,9 @@ class subServiese extends Model
         'delivery_duration',
         'service_id',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo(service::class);
+    }
 }

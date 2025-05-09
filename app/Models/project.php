@@ -22,7 +22,8 @@ class project extends Model
         'user_id',
         'status',
         'duration',
-        'budget'
+        'budget',
+        'budgetTo'
     ];
 
 
@@ -30,4 +31,15 @@ class project extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function favourites()
+{
+    return $this->morphMany(favourite::class, 'favouritable');
+}
+
+public function offers()
+    {
+        return $this->hasMany(offer::class);
+    }
+
 }

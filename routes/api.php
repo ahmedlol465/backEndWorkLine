@@ -11,6 +11,11 @@ use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\FavouriteController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\SubServieseController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\EmailController;
+use App\Http\Controllers\CrediteCardController;
+use App\Http\Controllers\VrificationController;
+use App\Http\Controllers\OfferController;
 
 // use App\Http\Controllers\UserBalanceController;
 use App\Http\Controllers\TransactionController;
@@ -61,6 +66,7 @@ post('/addService', [ServiceController::class, 'store']);
 Route::
 middleware('auth:api')->
 post('/addProject', [ProjectController::class, 'store']);
+Route::get('/projects/get-project/{id}', [ProjectController::class, 'getProject']);
 
 
 
@@ -94,7 +100,7 @@ Route::get('/payment/cancel', function () {
     return 'Payment was canceled.';
 })->name('payment.cancel');
 
-Route::get('/getUser', [UserController::class, 'GetUserData']);
+// Route::get('/getUser', [UserController::class, 'GetUserData']);
 
 
 Route::middleware('auth:api')->
@@ -164,7 +170,10 @@ middleware('auth:api')
 ->post('/verifyAuth', [UserController::class, 'verifyAuth']);
 
 
-
+Route::
+middleware('auth:api')->
+get('/getFavouritesByType', [FavouriteController::class, 'getFavouritesByType']);
+// Route::get('/favouritessss', [FavouriteController::class, 'getFavouritesByType'])->where('type', '(project|freelancer)'); //
 
 Route::
 middleware('auth:api')->
@@ -180,3 +189,35 @@ Route::apiResource('notification', NotificationController::class);
 
 
 Route::apiResource('sub_service', SubServieseController::class);
+
+
+
+Route::
+middleware('auth:api')->
+apiResource('bankAccount', BankAccountController::class);
+Route::
+middleware('auth:api')->
+apiResource('email', EmailController::class);
+Route::
+middleware('auth:api')->
+apiResource('creditCard', CrediteCardController::class);
+Route::
+middleware('auth:api')->
+apiResource('VrificationController', VrificationController::class);
+
+
+
+
+
+// Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:api')->
+    get('/offers', [OfferController::class, 'index']);
+    Route::middleware('auth:api')->
+    post('/offers', [OfferController::class, 'store']);
+    Route::middleware('auth:api')->
+    get('/offers/{id}', [OfferController::class, 'show']);
+    Route::middleware('auth:api')->
+    put('/offers/{id}', [OfferController::class, 'update']);
+    Route::middleware('auth:api')->
+    delete('/offers/{id}', [OfferController::class, 'destroy']);
+// });

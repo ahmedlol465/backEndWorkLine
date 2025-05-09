@@ -34,6 +34,7 @@ class StoreprojectRequest extends FormRequest
             'status' => 'sometimes|in:under_review,draft,opened,in_progress,completed,closed,canceled,rejected', // Optional status update
             'duration' => 'nullable|string|max:255',
             'budget' => 'nullable|string|max:255',
+            'budgetTo' => 'nullable|string|max:255',
         ];
     }
 }

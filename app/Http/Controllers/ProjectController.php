@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
+use App\Models\project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Facades\Storage;
@@ -107,13 +107,13 @@ class ProjectController extends Controller
     public function getStatusCounts()
     {
         $user = auth()->user();
-        $projectCounts = Project::where('user_id', $user->id)
+        $projectCounts = project::where('user_id', $user->id)
             ->select('status', \DB::raw('count(*) as count'))
             ->groupBy('status')
             ->get()
             ->keyBy('status'); // Key by status for easy access
 
-        $totalProjects = Project::where('user_id', $user->id)->count();
+        $totalProjects = project::where('user_id', $user->id)->count();
 
         $statuses = [
             'under_review', 'draft', 'opened', 'in_progress', 'completed', 'closed', 'canceled', 'rejected' // Project statuses based on image order
@@ -142,5 +142,23 @@ class ProjectController extends Controller
     {
         $imageName = Str::random(32) . '.' . $image->getClientOriginalExtension();
         return $image->storeAs('projects', $imageName, 'public'); // Store in 'projects' folder in public disk
+    }
+
+
+
+    public function getProject($id)
+    {
+        $project = Project::with(['user', 'offers'])->find($id);
+
+        if (!$project) {
+            return response()->json([
+                'message' => 'Project not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'Project retrieved successfully.',
+            'data' => $project,
+        ], 200);
     }
 }

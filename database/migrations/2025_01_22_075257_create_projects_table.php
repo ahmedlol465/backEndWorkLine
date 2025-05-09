@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("status")->default("under_review");
             $table->string('duration');
             $table->string('budget');
+            $table->string('budgetTo');
             $table->timestamps();
 
 

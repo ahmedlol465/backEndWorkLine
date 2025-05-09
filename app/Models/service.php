@@ -33,4 +33,14 @@ class service extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function subServices()
+    {
+        return $this->hasMany(subServiese::class);
+    }
+
+    public function favourites()
+    {
+        return $this->morphMany(favourite::class, 'favouritable');
+    }
+
 }

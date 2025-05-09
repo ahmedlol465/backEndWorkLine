@@ -8,6 +8,10 @@ use App\Http\Requests\UpdateserviceRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ServiceController extends Controller
 {
@@ -76,11 +80,25 @@ class ServiceController extends Controller
 
         // Handle file uploads
         if ($request->hasFile('thumbnail_photo')) {
-            $validatedData['thumbnail_photo'] = $request->file('thumbnail_photo')->store('services');
+            $imageName = Str::random(32) . '.' . $request->file('thumbnail_photo')->getClientOriginalExtension();
+
+            // Store the file in the "services" folder in the "public" disk
+            Storage::disk('public')->putFileAs('services', $request->file('thumbnail_photo'), $imageName);
+
+            // Save the file path to the database
+            $validatedData['thumbnail_photo'] = 'services/' . $imageName;
         }
+
         if ($request->hasFile('main_photo')) {
-            $validatedData['main_photo'] = $request->file('main_photo')->store('services');
+            $imageName = Str::random(32) . '.' . $request->file('main_photo')->getClientOriginalExtension();
+
+            // Store the file in the "services" folder in the "public" disk
+            Storage::disk('public')->putFileAs('services', $request->file('main_photo'), $imageName);
+
+            // Save the file path to the database
+            $validatedData['main_photo'] = 'services/' . $imageName;
         }
+
 
         // Create the service
         $service = Service::create($validatedData);
@@ -94,7 +112,7 @@ class ServiceController extends Controller
     public function show(service $service)
     {
         // Eager load the user relationship to avoid N+1 query issues
-        $service->load('user');
+        $service->load('user', 'subServices');
 
         // Return the service details as a JSON response
         return response()->json([

@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
 // dump("Hello world");
-class EmailSerieceProvider extends Mailable
+class EmailServiceProvider extends Mailable
 {
     use Queueable, SerializesModels;
 

@@ -74,6 +74,8 @@ class User extends Authenticatable implements JWTSubject
     public function userWorks(){
         return $this->hasOne(userWork::class, 'userId');
     }
+
+
     public function userData(){
         return $this->hasOne(userData::class, "userId");
     }
@@ -86,6 +88,12 @@ class User extends Authenticatable implements JWTSubject
     }
     public function userServices(){
         return $this->hasOne(service::class, "user_id");
+    }
+
+
+    public function favourites()
+    {
+        return $this->morphMany(favourite::class, 'favouritable');
     }
 
 }

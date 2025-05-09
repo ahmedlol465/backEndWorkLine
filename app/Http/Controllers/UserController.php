@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 // use App\Services\MailService;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\EmailSerieceProvider;
+use App\Mail\EmailServiceProvider;
 use App\Models\password_reset;
 
 use Illuminate\Support\Str;
@@ -103,7 +103,7 @@ class UserController extends Controller
                     $message = "Welcome to our platform!";
                     $subject = "Welcome to Our Service";
 
-                    Mail::to($email)->send(new EmailSerieceProvider($message, $subject, $code));
+                    Mail::to($email)->send(new EmailServiceProvider($message, $subject, $code));
 
 
                     $isCodeExist = password_reset::where('email', $email)->first();
@@ -130,6 +130,7 @@ class UserController extends Controller
                     ], 201);
                 }
     }
+
 
 
 
@@ -536,7 +537,7 @@ class UserController extends Controller
         {
             $user = auth()->user()->id;
             $validator = Validator::make($request->all(), [
-                'oldPassword' => 'required|string',
+                // 'oldPassword' => 'required|string',
                 'newPassword' => 'required|string|min:6',
             ]);
 
@@ -548,9 +549,9 @@ class UserController extends Controller
                 return response()->json(['message' => 'User not found'], 404);
             }
 
-            if (!Hash::check($request->oldPassword, $user->password)) {
-                return response()->json(['message' => 'Old password is incorrect'], 401);
-            }
+            // if (!Hash::check($request->oldPassword, $user->password)) {
+            //     return response()->json(['message' => 'Old password is incorrect'], 401);
+            // }
             $user->password = Hash::make($request->newPassword);
             $user->save();
 
@@ -596,7 +597,7 @@ class UserController extends Controller
                     $subject = "Welcome to Our Service";
 
 
-            Mail::to($email)->send(new EmailSerieceProvider($message, $subject, $token));
+            Mail::to($email)->send(new EmailServiceProvider($message, $subject, $token));
 
 
 

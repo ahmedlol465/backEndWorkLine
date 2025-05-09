@@ -13,7 +13,7 @@ class SubServieseController extends Controller
      */
     public function index()
     {
-        $subServices = subServiese::all();
+        $subServices = subServiese::with('service')->get();
 
         if ($subServices->isEmpty()) {
             return response()->json(['message' => 'No sub-services found.'], 404);
@@ -25,8 +25,13 @@ class SubServieseController extends Controller
     /**
      * Display the specified sub_service.
      */
-    public function show(SubService $subService)
+    public function show(subServiese $subService)
     {
+        $subService->load('service.user');
+        if (!$subService) {
+            return response()->json(['message' => 'Sub-service not found.'], 404);
+        }
+
         return response()->json(['message' => 'Sub-service retrieved successfully.', 'data' => $subService], 200);
     }
 

@@ -9,7 +9,7 @@ class userWork extends Model
 {
     use HasFactory;
 
-    protected $table = 'userWork';
+    protected $table = 'userwork';
 
     protected $fillable = [
         'userId',
@@ -30,4 +30,7 @@ class userWork extends Model
     {
         return $this->belongsTo(User::class, 'userId');
     }
+
+
+
 }
